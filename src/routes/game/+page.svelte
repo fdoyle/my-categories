@@ -3,8 +3,10 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
+    let maximumGuesses = 10;
+
 	let game = $page.url.searchParams.get('game');
-    let gameObject = getGameObject();
+	let gameObject = getGameObject();
 
 	let guesses: String[][] = $state([]);
 	let incorrectGuesses: String[][] = $state([]);
@@ -12,7 +14,7 @@
 
 	let remainingOptions: String[] = $state([]);
 
-    let correctlyGuessedCategories: String[] = $state([]);
+	let correctlyGuessedCategories: String[] = $state([]);
 
 	// your logic
 	let encodedGame = '';
@@ -57,19 +59,19 @@
 		}
 	}
 
-    function getItemsForCategoryName(name: String): String[] {
-        let game = gameObject;
-        if (game.category1.name === name) {
-            return game.category1.items;
-        } else if (game.category2.name === name) {
-            return game.category2.items;
-        } else if (game.category3.name === name) {
-            return game.category3.items;
-        } else if (game.category4.name === name) {
-            return game.category4.items;
-        }
-        return [];
-    }
+	function getItemsForCategoryName(name: String): String[] {
+		let game = gameObject;
+		if (game.category1.name === name) {
+			return game.category1.items;
+		} else if (game.category2.name === name) {
+			return game.category2.items;
+		} else if (game.category3.name === name) {
+			return game.category3.items;
+		} else if (game.category4.name === name) {
+			return game.category4.items;
+		}
+		return [];
+	}
 
 	function isItemSelected(item: String): Boolean {
 		return currentGuess.includes(item);
@@ -86,33 +88,37 @@
 		let category4Set: Set<String> = new Set(getGameObject().category4.items);
 
 		if (areSetsEqual(guessSet, category1Set)) {
-            correctlyGuessedCategories = [...correctlyGuessedCategories, getGameObject().category1.name];
-            remainingOptions = remainingOptions.filter((value) => !category1Set.has(value));
-            currentGuess = [];
+			correctlyGuessedCategories = [...correctlyGuessedCategories, getGameObject().category1.name];
+			remainingOptions = remainingOptions.filter((value) => !category1Set.has(value));
+			currentGuess = [];
 		} else if (areSetsEqual(guessSet, category2Set)) {
-            correctlyGuessedCategories = [...correctlyGuessedCategories, getGameObject().category2.name];
-            remainingOptions = remainingOptions.filter((value) => !category2Set.has(value));
-            currentGuess = [];
+			correctlyGuessedCategories = [...correctlyGuessedCategories, getGameObject().category2.name];
+			remainingOptions = remainingOptions.filter((value) => !category2Set.has(value));
+			currentGuess = [];
 		} else if (areSetsEqual(guessSet, category3Set)) {
-            correctlyGuessedCategories = [...correctlyGuessedCategories, getGameObject().category3.name];
-            remainingOptions = remainingOptions.filter((value) => !category3Set.has(value));
-            currentGuess = [];
+			correctlyGuessedCategories = [...correctlyGuessedCategories, getGameObject().category3.name];
+			remainingOptions = remainingOptions.filter((value) => !category3Set.has(value));
+			currentGuess = [];
 		} else if (areSetsEqual(guessSet, category4Set)) {
-            correctlyGuessedCategories = [...correctlyGuessedCategories, getGameObject().category4.name];
-            remainingOptions = remainingOptions.filter((value) => !category4Set.has(value));
-            currentGuess = [];
+			correctlyGuessedCategories = [...correctlyGuessedCategories, getGameObject().category4.name];
+			remainingOptions = remainingOptions.filter((value) => !category4Set.has(value));
+			currentGuess = [];
 		} else {
-            incorrectGuesses = [...incorrectGuesses, currentGuess];
-        }
+			incorrectGuesses = [...incorrectGuesses, currentGuess];
+		}
 	}
 
-    function getRemainingGuesses() {
-        return 4 - incorrectGuesses.length;
-    }
+	function getRemainingGuesses() {
+		return maximumGuesses - incorrectGuesses.length;
+	}
 
-    function hasWon() {
-        return correctlyGuessedCategories.length === 4;
-    }
+	function hasLost() {
+		return getRemainingGuesses() <= 0;
+	}
+
+	function hasWon() {
+		return correctlyGuessedCategories.length === 4;
+	}
 
 	onMount(() => {
 		console.log(game);
@@ -123,13 +129,12 @@
 <div class="root">
 	<div class="container">
 		<h1>More Connections!</h1>
-        <div class="correct-guesses">
-            {#each correctlyGuessedCategories as item}
-                <h3>{item}</h3>
-                <p>{getItemsForCategoryName(item).join()}</p>
-            {/each}
-
-        </div>
+		<div class="correct-guesses">
+			{#each correctlyGuessedCategories as item}
+				<h3>{item}</h3>
+				<p>{getItemsForCategoryName(item).join()}</p>
+			{/each}
+		</div>
 
 		<div class="game-board">
 			{#each remainingOptions as item}
@@ -144,11 +149,16 @@
 			<p>{item}</p>
 		{/each}
 
-		{#if currentGuess.length === 4}
-			<button onclick={submit}>Submit</button>
+		{#if hasWon()}
+			<h1>You won!</h1>
+		{:else if hasLost()}
+			<h1>You lost!</h1>
+		{:else}
+			{#if currentGuess.length === 4}
+				<button onclick={submit}>Submit</button>
+			{/if}
+			<p>Remaining guesses: {getRemainingGuesses()}</p>
 		{/if}
-
-        <p>Remaining guesses: {getRemainingGuesses()}</p>
 	</div>
 </div>
 
