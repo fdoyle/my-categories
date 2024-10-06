@@ -3,6 +3,14 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
+    let exampleShare = `Connections
+Puzzle #483
+🟩🟩🟩🟩
+🟦🟦🟦🟦
+🟨🟨🟨🟨
+🟪🟪🟪🟪
+`
+
     let maximumGuesses = 10;
 
 	let game = $page.url.searchParams.get('game');
@@ -120,6 +128,17 @@
 		return correctlyGuessedCategories.length === 4;
 	}
 
+    function shareToClipboard() {
+        let demo = [
+            "this",
+            "doesn't",
+            "work",
+            "yet", 
+            "sorry"
+        ].join("\n");
+        navigator.clipboard.writeText(demo);
+    }
+
 	onMount(() => {
 		console.log(game);
 		startGame();
@@ -159,6 +178,10 @@
 			{/if}
 			<p>Remaining guesses: {getRemainingGuesses()}</p>
 		{/if}
+
+        {#if hasWon() || hasLost()}
+            <button onclick={shareToClipboard}>Share</button>
+        {/if}
 	</div>
 </div>
 
