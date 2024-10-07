@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Encode from '$lib/encode';
 
+    let title = ''
+
 	let category1 = 'Things cats do';
 	let category1_item1 = 'knead';
 	let category1_item2 = 'purr';
@@ -30,6 +32,7 @@
 	}
 
 	function clear() {
+        title = ''
 		category1 = '';
 		category2 = '';
 		category3 = '';
@@ -54,6 +57,7 @@
 
 	function buildGame() {
 		return {
+            title: title,
 			category1: {
 				name: category1,
 				items: [category1_item1, category1_item2, category1_item3, category1_item4]
@@ -75,6 +79,7 @@
 
 	function isValid() {
 		return (
+            title &&
 			category1 &&
 			category2 &&
 			category3 &&
@@ -115,6 +120,9 @@
 <div class="root">
 	<div class="container">
 		<h1>Build your connections game here</h1>
+
+        <h3>title</h3>
+		<input class="category" bind:value={title} placeholder="Title" />
         <h3>yellow</h3>
 		<input class="category" bind:value={category1} placeholder="Category 1" />
 		<input class="item" bind:value={category1_item1} placeholder="Item 1" />

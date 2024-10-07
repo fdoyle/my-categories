@@ -22,6 +22,8 @@ Puzzle #483
 	let game = $page.url.searchParams.get('game');
 	let gameObject = getGameObject();
 
+	let title = gameObject.title || 'Untitled';
+
 	let guesses: String[][] = $state([]);
 	let incorrectGuesses: String[][] = $state([]);
 	let currentGuess: String[] = $state([]);
@@ -183,6 +185,8 @@ Puzzle #483
 		return (
 			prefix +
 			'\n' +
+			title +
+			'\n' +
 			guesses
 				.map((guessArray) => guessArray.map((guess) => getColorSquareForItem(guess)).join(''))
 				.join('\n')
@@ -234,7 +238,9 @@ Puzzle #483
 
 <div class="root">
 	<div class="container">
-		<h1>More Connections!</h1>
+		<h2>More Connections!</h2>
+		<h1>{title}</h1>
+        <br/>
 		<div class="correct-guesses">
 			{#each correctlyGuessedCategories as item}
 				<h3>{item}</h3>
@@ -285,6 +291,14 @@ Puzzle #483
 </div>
 
 <style>
+
+    h1{
+        text-align: center;
+    }
+
+    h2 {
+        text-align:center;
+    }
 	.root {
 		display: flex;
 		flex-direction: column;
@@ -293,9 +307,9 @@ Puzzle #483
 	}
 	.container {
 		display: grid;
-        grid: 1fr;
+		grid: 1fr;
 		width: 600px;
-        margin: 10px;
+		margin: 10px;
 	}
 
 	@media (max-width: 600px) {
@@ -303,7 +317,7 @@ Puzzle #483
 			width: 100%;
 		}
 		.game-item {
-            font-size: small;
+			font-size: small;
 			aspect-ratio: 1;
 		}
 	}
@@ -353,5 +367,5 @@ Puzzle #483
 	}
 	* {
 		font-family: Sans-Serif;
-    }
+	}
 </style>
