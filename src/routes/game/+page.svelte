@@ -30,6 +30,8 @@ Puzzle #483
 
 	let correctlyGuessedCategories: String[] = $state([]);
 
+    let temporaryMessage = $state("");
+
 	// your logic
 	let encodedGame = '';
 
@@ -53,6 +55,11 @@ Puzzle #483
 		return setA.size === setB.size && [...setA].every((value) => setB.has(value));
 	}
 
+    function hasAlreadyGuessedCurrentGuesses(): Boolean {
+        let currentGuessesSet = new Set(currentGuess);
+        return guesses.some((guessArray) => areSetsEqual(new Set(guessArray), currentGuessesSet));
+    }
+
 	function startGame() {
 		let game = getGameObject();
 		console.log(JSON.stringify(game, null, 4));
@@ -66,7 +73,7 @@ Puzzle #483
 	}
 
 	function itemSelected(item: String) {
-		console.log('clicked', item);
+        temporaryMessage = "";
 		if (currentGuess.includes(item)) {
 			currentGuess = currentGuess.filter((value) => value !== item);
 		} else if (currentGuess.length < 4) {
@@ -93,6 +100,11 @@ Puzzle #483
 	}
 
 	function submit() {
+        temporaryMessage = "";
+        if(hasAlreadyGuessedCurrentGuesses()) {
+            temporaryMessage = "You've already guessed this combination!";
+            return;
+        }
 		//add this to guesses
 		guesses = [...guesses, currentGuess];
 		//check if the guess is correct
@@ -198,7 +210,7 @@ Puzzle #483
 		<div class="correct-guesses">
 			{#each correctlyGuessedCategories as item}
 				<h3>{item}</h3>
-				<p>{getItemsForCategoryName(item).join()}</p>
+				<p>{getItemsForCategoryName(item).join(", ")}</p>
 			{/each}
 		</div>
 
@@ -210,10 +222,7 @@ Puzzle #483
 				>
 			{/each}
 		</div>
-
-		<!-- {#each currentGuess as item}
-			<p>{item}</p>
-		{/each} -->
+        <p>{temporaryMessage}</p>
 
 		{#if hasWon()}
 			<h1>You won!</h1>
