@@ -115,6 +115,7 @@
 <div class="root">
 	<div class="container">
 		<h1>Build your connections game here</h1>
+        <h3>yellow</h3>
 		<input class="category" bind:value={category1} placeholder="Category 1" />
 		<input class="item" bind:value={category1_item1} placeholder="Item 1" />
 		<input class="item" bind:value={category1_item2} placeholder="Item 1" />
@@ -123,6 +124,7 @@
 
 		<br />
 
+        <h3>green</h3>
 		<input class="category" bind:value={category2} placeholder="Category 1" />
 		<input class="item" bind:value={category2_item1} placeholder="Item 1" />
 		<input class="item" bind:value={category2_item2} placeholder="Item 1" />
@@ -130,6 +132,8 @@
 		<input class="item" bind:value={category2_item4} placeholder="Item 3" />
 
 		<br />
+
+        <h3>blue</h3>
 		<input class="category" bind:value={category3} placeholder="Category 1" />
 		<input class="item" bind:value={category3_item1} placeholder="Item 1" />
 		<input class="item" bind:value={category3_item2} placeholder="Item 1" />
@@ -137,6 +141,8 @@
 		<input class="item" bind:value={category3_item4} placeholder="Item 3" />
 
 		<br />
+
+        <h3>purple</h3>
 		<input class="category" bind:value={category4} placeholder="Category 1" />
 		<input class="item" bind:value={category4_item1} placeholder="Item 1" />
 		<input class="item" bind:value={category4_item2} placeholder="Item 1" />
@@ -171,4 +177,10 @@
 	.item {
 		margin: 5px 10px;
 	}
+
+    h3 {
+        text-align: center;
+        padding: 0px;
+        margin: 0px;
+    }
 </style>

@@ -193,11 +193,11 @@ Puzzle #483
 
 	function getColorSquareForCategory(category: String): String {
 		if (category === gameObject.category1.name) {
-			return green;
-		} else if (category === gameObject.category2.name) {
-			return blue;
-		} else if (category === gameObject.category3.name) {
 			return yellow;
+		} else if (category === gameObject.category2.name) {
+			return green;
+		} else if (category === gameObject.category3.name) {
+			return blue;
 		} else if (category === gameObject.category4.name) {
 			return purple;
 		}
