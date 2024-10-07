@@ -12,10 +12,14 @@ Puzzle #483
 `;
 
 	let prefix = 'Custom Connections!';
-	let green = '🟩';
-	let blue = '🟦';
-	let yellow = '🟨';
-	let purple = '🟪';
+	let greenBox = '🟩';
+	let blueBox = '🟦';
+	let yellowBox = '🟨';
+	let purpleBox = '🟪';
+    let green = '#A7C268';
+    let yellow = '#F5E07E';
+    let blue = '#B4C3EB';
+    let purple = '#B283C1';
 
 	let maximumGuesses = 10;
 
@@ -205,6 +209,19 @@ Puzzle #483
 
 	function getColorSquareForCategory(category: String): String {
 		if (category === gameObject.category1.name) {
+			return yellowBox;
+		} else if (category === gameObject.category2.name) {
+			return greenBox;
+		} else if (category === gameObject.category3.name) {
+			return blueBox;
+		} else if (category === gameObject.category4.name) {
+			return purpleBox;
+		}
+		return '';
+	}
+
+    function getColorForCategory(category: String): String {
+		if (category === gameObject.category1.name) {
 			return yellow;
 		} else if (category === gameObject.category2.name) {
 			return green;
@@ -213,7 +230,7 @@ Puzzle #483
 		} else if (category === gameObject.category4.name) {
 			return purple;
 		}
-		return '';
+		return '#f0f0f0';
 	}
 
 	function getCategoryByItem(item: String): String {
@@ -243,8 +260,11 @@ Puzzle #483
 		<br />
 		<div class="correct-guesses">
 			{#each correctlyGuessedCategories as item}
-				<h3>{item}</h3>
-				<p>{getItemsForCategoryName(item).join(', ')}</p>
+				<div class="correct-guess"
+                style = "background-color: {getColorForCategory(item)}">
+					<h3 class="correct-guess-category">{item}</h3>
+					<p class="correct-guess-answers">{getItemsForCategoryName(item).join(', ')}</p>
+				</div>
 			{/each}
 		</div>
 
@@ -305,6 +325,19 @@ Puzzle #483
 	h2 {
 		text-align: center;
 	}
+
+
+    .correct-guess-category {
+        text-align: center;
+		text-transform: uppercase;
+    }
+
+    .correct-guess-answers {
+        text-align: center;
+		text-transform: uppercase;
+    }
+
+    
 	.root {
 		display: flex;
 		flex-direction: column;
@@ -346,6 +379,19 @@ Puzzle #483
 		font-weight: bold;
 		border-width: 0px;
 	}
+    .correct-guesses {
+        display: grid;
+        grid-template-columns: 1;
+        grid-gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .correct-guess {
+        background-color: #f0f0f0;
+        padding-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+    }
 
 	/* for small devices */
 
