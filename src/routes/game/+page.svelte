@@ -30,7 +30,7 @@ Puzzle #483
 
 	let correctlyGuessedCategories: String[] = $state([]);
 
-    let temporaryMessage = $state("");
+	let temporaryMessage: String[] = $state([]);
 
 	// your logic
 	let encodedGame = '';
@@ -55,10 +55,10 @@ Puzzle #483
 		return setA.size === setB.size && [...setA].every((value) => setB.has(value));
 	}
 
-    function hasAlreadyGuessedCurrentGuesses(): Boolean {
-        let currentGuessesSet = new Set(currentGuess);
-        return guesses.some((guessArray) => areSetsEqual(new Set(guessArray), currentGuessesSet));
-    }
+	function hasAlreadyGuessedCurrentGuesses(): Boolean {
+		let currentGuessesSet = new Set(currentGuess);
+		return guesses.some((guessArray) => areSetsEqual(new Set(guessArray), currentGuessesSet));
+	}
 
 	function startGame() {
 		let game = getGameObject();
@@ -73,12 +73,26 @@ Puzzle #483
 	}
 
 	function itemSelected(item: String) {
-        temporaryMessage = "";
+		temporaryMessage = [];
 		if (currentGuess.includes(item)) {
 			currentGuess = currentGuess.filter((value) => value !== item);
 		} else if (currentGuess.length < 4) {
 			currentGuess = [...currentGuess, item];
 		}
+	}
+
+	function isOneAwayFromAny() {
+		let currentGuessSet = new Set(currentGuess);
+		let category1Set: Set<String> = new Set(getGameObject().category1.items);
+		let category2Set: Set<String> = new Set(getGameObject().category2.items);
+		let category3Set: Set<String> = new Set(getGameObject().category3.items);
+		let category4Set: Set<String> = new Set(getGameObject().category4.items);
+		return (
+			currentGuessSet.difference(category1Set).size === 1 ||
+			currentGuessSet.difference(category2Set).size === 1 ||
+			currentGuessSet.difference(category3Set).size === 1 ||
+			currentGuessSet.difference(category4Set).size === 1
+		);
 	}
 
 	function getItemsForCategoryName(name: String): String[] {
@@ -100,11 +114,14 @@ Puzzle #483
 	}
 
 	function submit() {
-        temporaryMessage = "";
-        if(hasAlreadyGuessedCurrentGuesses()) {
-            temporaryMessage = "You've already guessed this combination!";
-            return;
-        }
+		temporaryMessage = [];
+		if (hasAlreadyGuessedCurrentGuesses()) {
+			temporaryMessage = ["You've already guessed this combination!"];
+			if (isOneAwayFromAny()) {
+				temporaryMessage = [...temporaryMessage, "You're one away from a correct guess!"];
+			}
+			return;
+		}
 		//add this to guesses
 		guesses = [...guesses, currentGuess];
 		//check if the guess is correct
@@ -132,6 +149,9 @@ Puzzle #483
 			currentGuess = [];
 		} else {
 			incorrectGuesses = [...incorrectGuesses, currentGuess];
+			if (isOneAwayFromAny()) {
+				temporaryMessage = [...temporaryMessage, "You're one away from a correct guess!"];
+			}
 		}
 	}
 
@@ -210,7 +230,7 @@ Puzzle #483
 		<div class="correct-guesses">
 			{#each correctlyGuessedCategories as item}
 				<h3>{item}</h3>
-				<p>{getItemsForCategoryName(item).join(", ")}</p>
+				<p>{getItemsForCategoryName(item).join(', ')}</p>
 			{/each}
 		</div>
 
@@ -222,7 +242,9 @@ Puzzle #483
 				>
 			{/each}
 		</div>
-        <p>{temporaryMessage}</p>
+		{#each temporaryMessage as message}
+			<p>{message}</p>
+		{/each}
 
 		{#if hasWon()}
 			<h1>You won!</h1>
