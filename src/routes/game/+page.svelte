@@ -11,6 +11,12 @@ Puzzle #483
 🟪🟪🟪🟪
 `;
 
+    let prefix = "Custom Connections!";
+    let green = "🟩"
+    let blue = "🟦"
+    let yellow = "🟨"
+    let purple = "🟪"
+
 	let maximumGuesses = 10;
 
 	let game = $page.url.searchParams.get('game');
@@ -129,10 +135,47 @@ Puzzle #483
 		return correctlyGuessedCategories.length === 4;
 	}
 
+    function getCurrentShareText(): String {
+        return prefix+ "\n" + guesses.map((guessArray) => guessArray.map((guess)=>getColorSquareForItem(guess)).join('')).join('\n');
+    }
+
 	function shareToClipboard() {
-		let demo = ['this', "doesn't", 'work', 'yet', 'sorry'].join('\n');
-		navigator.clipboard.writeText(demo);
+        let shareText = getCurrentShareText();
+		navigator.clipboard.writeText(shareText.toString());
+
 	}
+
+    function getColorSquareForItem(item: String): String {
+        let category = getCategoryByItem(item);
+        return getColorSquareForCategory(category);
+    }
+
+    function getColorSquareForCategory(category: String): String {
+        if (category === gameObject.category1.name) {
+            return green;
+        } else if (category === gameObject.category2.name) {
+            return blue;
+        } else if (category === gameObject.category3.name) {
+            return yellow;
+        } else if (category === gameObject.category4.name) {
+            return purple;
+        }
+        return '';
+    }
+
+    function getCategoryByItem(item: String): String {
+        let game = gameObject;
+        if (game.category1.items.includes(item)) {
+            return game.category1.name;
+        } else if (game.category2.items.includes(item)) {
+            return game.category2.name;
+        } else if (game.category3.items.includes(item)) {
+            return game.category3.name;
+        } else if (game.category4.items.includes(item)) {
+            return game.category4.name;
+        }
+        return '';
+    }
 
 	onMount(() => {
 		console.log(game);
