@@ -16,10 +16,10 @@ Puzzle #483
 	let blueBox = '🟦';
 	let yellowBox = '🟨';
 	let purpleBox = '🟪';
-    let green = '#A7C268';
-    let yellow = '#F5E07E';
-    let blue = '#B4C3EB';
-    let purple = '#B283C1';
+	let green = '#A7C268';
+	let yellow = '#F5E07E';
+	let blue = '#B4C3EB';
+	let purple = '#B283C1';
 
 	let maximumGuesses = 10;
 
@@ -197,8 +197,31 @@ Puzzle #483
 		);
 	}
 
+	function getCurrentShareTextWithAnswers(): String {
+		return (
+			prefix +
+			'\n' +
+			title +
+			'\n' +
+			guesses
+				.map(
+					(guessArray) =>
+						guessArray.map((guess) => getColorSquareForItem(guess)).join('') +
+						' ||' +
+						guessArray.join(', ') +
+						'||'
+				)
+				.join('\n')
+		);
+	}
+
 	function shareToClipboard() {
 		let shareText = getCurrentShareText();
+		navigator.clipboard.writeText(shareText.toString());
+	}
+
+    function shareWithAnswers() {
+        let shareText = getCurrentShareTextWithAnswers();
 		navigator.clipboard.writeText(shareText.toString());
 	}
 
@@ -220,7 +243,7 @@ Puzzle #483
 		return '';
 	}
 
-    function getColorForCategory(category: String): String {
+	function getColorForCategory(category: String): String {
 		if (category === gameObject.category1.name) {
 			return yellow;
 		} else if (category === gameObject.category2.name) {
@@ -260,8 +283,7 @@ Puzzle #483
 		<br />
 		<div class="correct-guesses">
 			{#each correctlyGuessedCategories as item}
-				<div class="correct-guess"
-                style = "background-color: {getColorForCategory(item)}">
+				<div class="correct-guess" style="background-color: {getColorForCategory(item)}">
 					<h3 class="correct-guess-category">{item}</h3>
 					<p class="correct-guess-answers">{getItemsForCategoryName(item).join(', ')}</p>
 				</div>
@@ -304,7 +326,7 @@ Puzzle #483
 		{/if}
 
 		<!-- <pre>
-            {getCurrentShareText()}
+            {getCurrentShareTextWithAnswers()}
         </pre>
 
         <pre>
@@ -313,6 +335,8 @@ Puzzle #483
 
 		{#if hasWon() || hasLost()}
 			<button class="button" onclick={shareToClipboard}>Share</button>
+            <br/>
+			<button class="button" onclick={shareWithAnswers}>Share with answers</button>
 		{/if}
 	</div>
 </div>
@@ -326,18 +350,16 @@ Puzzle #483
 		text-align: center;
 	}
 
-
-    .correct-guess-category {
-        text-align: center;
+	.correct-guess-category {
+		text-align: center;
 		text-transform: uppercase;
-    }
+	}
 
-    .correct-guess-answers {
-        text-align: center;
+	.correct-guess-answers {
+		text-align: center;
 		text-transform: uppercase;
-    }
+	}
 
-    
 	.root {
 		display: flex;
 		flex-direction: column;
@@ -379,19 +401,19 @@ Puzzle #483
 		font-weight: bold;
 		border-width: 0px;
 	}
-    .correct-guesses {
-        display: grid;
-        grid-template-columns: 1;
-        grid-gap: 10px;
-        margin-bottom: 10px;
-    }
+	.correct-guesses {
+		display: grid;
+		grid-template-columns: 1;
+		grid-gap: 10px;
+		margin-bottom: 10px;
+	}
 
-    .correct-guess {
-        background-color: #f0f0f0;
-        padding-bottom: 10px;
-        padding: 10px;
-        border-radius: 5px;
-    }
+	.correct-guess {
+		background-color: #f0f0f0;
+		padding-bottom: 10px;
+		padding: 10px;
+		border-radius: 5px;
+	}
 
 	/* for small devices */
 
