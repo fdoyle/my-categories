@@ -17,7 +17,7 @@ const config = {
 			fallback: '404.html'
 		}),
 		paths: {
-			base: process.argv.includes('dev') ? '' : 'my-categories'
+			base: process.argv.includes('dev') ? '' : '/my-categories'
 		}
 	}
 };
