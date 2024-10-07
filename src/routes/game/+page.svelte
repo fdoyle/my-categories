@@ -240,7 +240,7 @@ Puzzle #483
 	<div class="container">
 		<h2>More Connections!</h2>
 		<h1>{title}</h1>
-        <br/>
+		<br />
 		<div class="correct-guesses">
 			{#each correctlyGuessedCategories as item}
 				<h3>{item}</h3>
@@ -269,11 +269,18 @@ Puzzle #483
 			<h1>You lost!</h1>
 		{:else}
 			<br />
-			<button class="button" disabled={!(currentGuess.length === 4)} onclick={submit}>Submit</button
-			>
+			<button class="button" disabled={!(currentGuess.length === 4)} onclick={submit}>
+				Submit
+			</button>
 			<br />
 			<button class="button" onclick={shuffleRemaining}>Shuffle</button>
-			<p>Remaining guesses: {getRemainingGuesses()}</p>
+			<br />
+			<div class="remaining-guess-count-container">
+				<p>Remaining guesses:</p>
+				{#each { length: getRemainingGuesses() } as _, i}
+					<div class="guess-dot"></div>
+				{/each}
+			</div>
 		{/if}
 
 		<!-- <pre>
@@ -291,14 +298,13 @@ Puzzle #483
 </div>
 
 <style>
+	h1 {
+		text-align: center;
+	}
 
-    h1{
-        text-align: center;
-    }
-
-    h2 {
-        text-align:center;
-    }
+	h2 {
+		text-align: center;
+	}
 	.root {
 		display: flex;
 		flex-direction: column;
@@ -367,5 +373,20 @@ Puzzle #483
 	}
 	* {
 		font-family: Sans-Serif;
+	}
+
+	.remaining-guess-count-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.guess-dot {
+		width: 10px;
+		height: 10px;
+		background-color: #555555;
+		border-radius: 50%;
+		margin: 5px;
 	}
 </style>
