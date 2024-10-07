@@ -292,11 +292,10 @@ Puzzle #483
 		align-items: center;
 	}
 	.container {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: stretch;
+		display: grid;
+        grid: 1fr;
 		width: 600px;
+        margin: 10px;
 	}
 
 	@media (max-width: 600px) {
@@ -326,8 +325,6 @@ Puzzle #483
 		text-transform: uppercase;
 		font-weight: bold;
 		border-width: 0px;
-
-		font-size: medium;
 	}
 
 	/* for small devices */
