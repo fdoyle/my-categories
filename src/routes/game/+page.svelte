@@ -30,7 +30,9 @@ Puzzle #483
 
 	let correctlyGuessedCategories: String[] = $state([]);
 
-	let temporaryMessage: String[] = $state([]);
+	// let temporaryMessage: String[] = $state([]);
+	let showDuplicateGuessMessage = $state(false);
+	let showOneAwayMessage = $state(false);
 
 	// your logic
 	let encodedGame = '';
@@ -73,7 +75,8 @@ Puzzle #483
 	}
 
 	function itemSelected(item: String) {
-		temporaryMessage = [];
+		showDuplicateGuessMessage = false;
+		showOneAwayMessage = false;
 		if (currentGuess.includes(item)) {
 			currentGuess = currentGuess.filter((value) => value !== item);
 		} else if (currentGuess.length < 4) {
@@ -114,11 +117,12 @@ Puzzle #483
 	}
 
 	function submit() {
-		temporaryMessage = [];
+		showDuplicateGuessMessage = false;
+		showOneAwayMessage = false;
 		if (hasAlreadyGuessedCurrentGuesses()) {
-			temporaryMessage = ["You've already guessed this combination!"];
+			showDuplicateGuessMessage = true;
 			if (isOneAwayFromAny()) {
-				temporaryMessage = [...temporaryMessage, "You're one away from a correct guess!"];
+				showOneAwayMessage = true;
 			}
 			return;
 		}
@@ -150,7 +154,7 @@ Puzzle #483
 		} else {
 			incorrectGuesses = [...incorrectGuesses, currentGuess];
 			if (isOneAwayFromAny()) {
-				temporaryMessage = [...temporaryMessage, "You're one away from a correct guess!"];
+				showOneAwayMessage = true;
 			}
 		}
 	}
@@ -169,6 +173,10 @@ Puzzle #483
 
 	function isGameOver() {
 		return hasLost() || hasWon();
+	}
+
+	function currentGuessEqualsLastGuess() {
+		return areSetsEqual(new Set(guesses[guesses.length - 1]), new Set(currentGuess));
 	}
 
 	function getCurrentShareText(): String {
@@ -242,9 +250,12 @@ Puzzle #483
 				>
 			{/each}
 		</div>
-		{#each temporaryMessage as message}
-			<p>{message}</p>
-		{/each}
+		{#if showDuplicateGuessMessage}
+			<p>You've already guessed this combination!</p>
+		{/if}
+		{#if showOneAwayMessage}
+			<p>You are one away...</p>
+		{/if}
 
 		{#if hasWon()}
 			<h1>You won!</h1>
@@ -252,13 +263,14 @@ Puzzle #483
 			<h1>You lost!</h1>
 		{:else}
 			<br />
-			<button disabled={!(currentGuess.length === 4)} onclick={submit}>Submit</button>
+			<button class="button" disabled={!(currentGuess.length === 4)} onclick={submit}>Submit</button
+			>
 			<br />
-			<button onclick={shuffleRemaining}>Shuffle</button>
+			<button class="button" onclick={shuffleRemaining}>Shuffle</button>
 			<p>Remaining guesses: {getRemainingGuesses()}</p>
 		{/if}
 
-        <!-- <pre>
+		<!-- <pre>
             {getCurrentShareText()}
         </pre>
 
@@ -267,7 +279,7 @@ Puzzle #483
         </pre> -->
 
 		{#if hasWon() || hasLost()}
-			<button onclick={shareToClipboard}>Share</button>
+			<button class="button" onclick={shareToClipboard}>Share</button>
 		{/if}
 	</div>
 </div>
@@ -284,7 +296,17 @@ Puzzle #483
 		flex-direction: column;
 		justify-content: center;
 		align-items: stretch;
-		width: 800;
+		width: 600px;
+	}
+
+	@media (max-width: 600px) {
+		.container {
+			width: 100%;
+		}
+		.game-item {
+            font-size: small;
+			aspect-ratio: 1;
+		}
 	}
 
 	.game-board {
@@ -300,11 +322,39 @@ Puzzle #483
 		background-color: #f0f0f0;
 		border-radius: 5px;
 		padding: 10px;
-		size: 100px 100px;
+		min-height: 60px;
+		text-transform: uppercase;
+		font-weight: bold;
+		border-width: 0px;
+
+		font-size: medium;
+	}
+
+	/* for small devices */
+
+	.button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: #555555;
+		color: white;
+		border-radius: 200px;
+		padding: 10px;
+		min-height: 40px;
+		text-transform: uppercase;
+		font-weight: bold;
+		border-width: 0;
+	}
+
+	.button:hover {
+		background-color: #333333;
 	}
 
 	.selected {
-		background-color: #000000;
+		background-color: #555555;
 		color: #f0f0f0;
 	}
+	* {
+		font-family: Sans-Serif;
+    }
 </style>
