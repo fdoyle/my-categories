@@ -258,6 +258,14 @@ Puzzle #483
 			<p>Remaining guesses: {getRemainingGuesses()}</p>
 		{/if}
 
+        <!-- <pre>
+            {getCurrentShareText()}
+        </pre>
+
+        <pre>
+            {JSON.stringify(gameObject, null, 4)}}
+        </pre> -->
+
 		{#if hasWon() || hasLost()}
 			<button onclick={shareToClipboard}>Share</button>
 		{/if}
