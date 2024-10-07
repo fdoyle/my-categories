@@ -106,7 +106,7 @@
 	function navigateToGame() {
 		if (isValid()) {
 			let game = getGameAsUrlParam().toString();
-			let newPath = `/game/?game=${game}`;
+			let newPath = `/my-categories/game/?game=${game}`;
 			window.location.href = newPath;
 		}
 	}
