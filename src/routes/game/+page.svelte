@@ -3,15 +3,15 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
-    let exampleShare = `Connections
+	let exampleShare = `Connections
 Puzzle #483
 🟩🟩🟩🟩
 🟦🟦🟦🟦
 🟨🟨🟨🟨
 🟪🟪🟪🟪
-`
+`;
 
-    let maximumGuesses = 10;
+	let maximumGuesses = 10;
 
 	let game = $page.url.searchParams.get('game');
 	let gameObject = getGameObject();
@@ -56,6 +56,7 @@ Puzzle #483
 			...game.category3.items,
 			...game.category4.items
 		];
+		shuffleRemaining();
 	}
 
 	function itemSelected(item: String) {
@@ -128,16 +129,10 @@ Puzzle #483
 		return correctlyGuessedCategories.length === 4;
 	}
 
-    function shareToClipboard() {
-        let demo = [
-            "this",
-            "doesn't",
-            "work",
-            "yet", 
-            "sorry"
-        ].join("\n");
-        navigator.clipboard.writeText(demo);
-    }
+	function shareToClipboard() {
+		let demo = ['this', "doesn't", 'work', 'yet', 'sorry'].join('\n');
+		navigator.clipboard.writeText(demo);
+	}
 
 	onMount(() => {
 		console.log(game);
@@ -173,15 +168,18 @@ Puzzle #483
 		{:else if hasLost()}
 			<h1>You lost!</h1>
 		{:else}
+			<br />
+			<button onclick={shuffleRemaining}>Shuffle</button>
+			<br />
 			{#if currentGuess.length === 4}
 				<button onclick={submit}>Submit</button>
 			{/if}
 			<p>Remaining guesses: {getRemainingGuesses()}</p>
 		{/if}
 
-        {#if hasWon() || hasLost()}
-            <button onclick={shareToClipboard}>Share</button>
-        {/if}
+		{#if hasWon() || hasLost()}
+			<button onclick={shareToClipboard}>Share</button>
+		{/if}
 	</div>
 </div>
 
